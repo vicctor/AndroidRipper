@@ -1,0 +1,27 @@
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'it.unina.android'
+version = '1.0-SNAPSHOT'
+
+// Configure the repository
+uploadArchives {
+    repositories {
+        mavenDeployer {
+	    pom.artifactId = 'android-ripper-common'
+            repository(url: uri("pomRepo"))
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    mavenLocal()
+}
+
+dependencies {
+   compile 'it.unina.android:android-ripper-common:1.0-SNAPSHOT'
+   compile 'org.apache.commons:commons-lang3:3.7'
+   compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
+}
