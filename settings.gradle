@@ -1,1 +1,1 @@
-include "AndroidRipperCommon",  "AndroidRipperDriver", "AndroidRipperService",  "AndroidRipperService:app", "AndroidRipper",  "AndroidRipper:app"
+include "android-ripper-common",  "android-ripper-driver", "android-ripper-app", "android-ripper-service"

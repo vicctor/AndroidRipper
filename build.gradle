@@ -1,8 +1,10 @@
 
 apply plugin: 'maven'
 
-group = 'it.unina.android'
-version = '1.0-SNAPSHOT'
+subprojects {
+  group = 'it.unina.android'
+  version = '1.0-SNAPSHOT'
+}
 
 // Configure the repository
 uploadArchives {
@@ -16,6 +18,8 @@ uploadArchives {
 
 
 allprojects {
+    apply plugin: 'maven-publish'
+    
     repositories {
         google()
         jcenter()

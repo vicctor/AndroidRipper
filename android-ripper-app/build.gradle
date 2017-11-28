@@ -1,9 +1,19 @@
 apply plugin: 'com.android.application'
 
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenLocal()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+
+    }
+}
+
 android {
-//    lintOptions {
-//        disable 'all'
-//    }
     compileSdkVersion 22
     buildToolsVersion "26.0.2"
 
@@ -24,7 +34,7 @@ repositories {
     mavenLocal()
 }
 dependencies {
-    compile 'it.unina.android:android-ripper-common:1.0-SNAPSHOT'
+    compile project(':android-ripper-common')
     // https://mvnrepository.com/artifact/com.jayway.android.robotium/robotium-solo
     compile group: 'com.jayway.android.robotium', name: 'robotium-solo', version: '5.5.2'
 }

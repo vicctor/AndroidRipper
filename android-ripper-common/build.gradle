@@ -1,16 +1,20 @@
-
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
-group = 'it.unina.android'
-version = '1.0-SNAPSHOT'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
 
 // Configure the repository
 uploadArchives {
     repositories {
         mavenDeployer {
 	    pom.artifactId = 'android-ripper-common'
-            repository(url: uri("pomRepo"))
         }
     }
 }
