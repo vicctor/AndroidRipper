@@ -105,6 +105,17 @@ The following outputs are produced by Android Ripper:
 * **Execution Statistics** In the report.xml file
 * **GUI Model of the Application** in xml format, in the model folder
 
+# Building Project
+
+To build this project, just make sure that you have installed:
+
+* JDK1.8
+* Android SDK version 22
+* Environment variable ANDROID_HOME points to your Android SDK dir
+
+Then run this command from your command line:
+```gradle build```
+
 ## License
 
 GNU Affero General Public License, version 3
