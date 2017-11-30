@@ -11,13 +11,38 @@ uploadArchives {
     }
 }
 
-repositories {
-    jcenter()
-    mavenLocal()
+dependencies {
+   //compile 'org.apache.commons:commons-lang3:3.7'
+   // compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
+   compile files('lib/custom_gson_2.8.1.jar')
+   compile files('lib/commons-lang3-3.5.jar')
+   compile project (':android-ripper-common')
 }
 
-dependencies {
-   compile 'org.apache.commons:commons-lang3:3.7'
-   compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
-   compile project (':android-ripper-common')
+task run(type: JavaExec) {
+    //c:\Users\Artur\AppData\Local\Android\sdk\tools\;c:\Users\Artur\AppData\Local\Android\sdk\platform-tools\;c:\Users\Artur\AppData\Local\Android\sdk\build-tools\24.0.1\
+    println "ANDROID_HOME=" + System.env.ANDROID_HOME
+    def newPath = System.env.JAVA_HOME + "\\bin" + ";" + System.env.ANDROID_HOME + "\\tools" + ";" + System.env.ANDROID_HOME + "\\platfrom-tools" + ";" + System.env.ANDROID_HOME + "\\build-tools\\24.0.1" + ";" + System.env.Path
+    println "NEW PATH=" + newPath
+    environment 'PATH', newPath
+    println "PATH=" + System.env.Path
+    main "it.unina.android.ripper.boundary.AndroidRipper"
+    classpath sourceSets.main.runtimeClasspath
+    if (project.hasProperty("apk")) {
+        args apk
+    }
+}
+
+task debug(type: JavaExec) {
+    //c:\Users\Artur\AppData\Local\Android\sdk\tools\;c:\Users\Artur\AppData\Local\Android\sdk\platform-tools\;c:\Users\Artur\AppData\Local\Android\sdk\build-tools\24.0.1\
+    println "ANDROID_HOME=" + System.env.ANDROID_HOME
+    def newPath = System.env.JAVA_HOME + "\\bin" + ";" + System.env.ANDROID_HOME + "\\tools" + ";" + System.env.ANDROID_HOME + "\\platfrom-tools" + ";" + System.env.ANDROID_HOME + "\\build-tools\\24.0.1" + ";" + System.env.Path
+    println "NEW PATH=" + newPath
+    environment 'PATH', newPath
+    println "PATH=" + System.env.Path
+    main "it.unina.android.ripper.boundary.AndroidRipper"
+    classpath sourceSets.main.runtimeClasspath
+    if (project.hasProperty("apk")) {
+        args apk
+    }
 }

@@ -19,12 +19,11 @@
 
 package it.unina.android.ripper.boundary;
 
-import java.io.File;
-import java.util.Scanner;
-
 import it.unina.android.ripper.driver.AndroidRipperStarter;
 import it.unina.android.ripper.driver.exception.RipperUncaughtExceptionHandler;
 import it.unina.android.ripper.observer.RipperEventListener;
+import java.io.File;
+import java.util.Scanner;
 
 /**
  * Entry Point of Android Ripper
@@ -53,7 +52,7 @@ public class AndroidRipper implements RipperEventListener {
 		boolean noProblem = false;
 
 		System.out.println("Android Ripper");
-
+                System.out.println("Currnet dir: " + new File(".").getAbsolutePath());
 		AndroidRipper ripper = null;
 
 		if (args.length < 1) {
