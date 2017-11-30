@@ -2,8 +2,13 @@
 apply plugin: 'maven'
 
 subprojects {
-  group = 'it.unina.android'
-  version = '1.0-SNAPSHOT'
+    group = 'it.unina.android'
+    version = '1.0-SNAPSHOT'
+  
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
 }
 
 // Configure the repository
