@@ -20,7 +20,6 @@ dependencies {
 }
 
 task run(type: JavaExec) {
-    //c:\Users\Artur\AppData\Local\Android\sdk\tools\;c:\Users\Artur\AppData\Local\Android\sdk\platform-tools\;c:\Users\Artur\AppData\Local\Android\sdk\build-tools\24.0.1\
     println "ANDROID_HOME=" + System.env.ANDROID_HOME
     def newPath = System.env.JAVA_HOME + "\\bin" + ";" + System.env.ANDROID_HOME + "\\tools" + ";" + System.env.ANDROID_HOME + "\\platfrom-tools" + ";" + System.env.ANDROID_HOME + "\\build-tools\\24.0.1" + ";" + System.env.Path
     println "NEW PATH=" + newPath
@@ -34,7 +33,6 @@ task run(type: JavaExec) {
 }
 
 task debug(type: JavaExec) {
-    //c:\Users\Artur\AppData\Local\Android\sdk\tools\;c:\Users\Artur\AppData\Local\Android\sdk\platform-tools\;c:\Users\Artur\AppData\Local\Android\sdk\build-tools\24.0.1\
     println "ANDROID_HOME=" + System.env.ANDROID_HOME
     def newPath = System.env.JAVA_HOME + "\\bin" + ";" + System.env.ANDROID_HOME + "\\tools" + ";" + System.env.ANDROID_HOME + "\\platfrom-tools" + ";" + System.env.ANDROID_HOME + "\\build-tools\\24.0.1" + ";" + System.env.Path
     println "NEW PATH=" + newPath
@@ -45,4 +43,10 @@ task debug(type: JavaExec) {
     if (project.hasProperty("apk")) {
         args apk
     }
+}
+
+task startemulator(type: Exec) {
+    def emulator = new File(System.env.ANDROID_HOME + "emulator/emulator").getAbsoluteFile()
+    commandLine new File(System.env.ANDROID_HOME + "emulator/emulator").getAbsoluteFile()
+    args '-avd testX86'.split(' ')
 }
