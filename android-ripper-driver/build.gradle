@@ -40,6 +40,7 @@ task debug(type: JavaExec) {
     println "PATH=" + System.env.Path
     main "it.unina.android.ripper.boundary.AndroidRipper"
     classpath sourceSets.main.runtimeClasspath
+    jvmArgs '-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8787'.split(' ')
     if (project.hasProperty("apk")) {
         args apk
     }
