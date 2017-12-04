@@ -28,3 +28,4 @@ build/
 
 /AndroidRipper/.nb-gradle/
 /android-ripper-app/.nb-gradle/
+android-ripper-driver/tools
