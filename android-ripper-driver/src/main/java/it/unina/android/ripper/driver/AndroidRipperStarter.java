@@ -33,6 +33,7 @@ import it.unina.android.ripper.installer.OSSpecific;
 import it.unina.android.ripper.installer.SearchableManifest;
 import it.unina.android.ripper.installer.ZipUtils;
 import it.unina.android.ripper.observer.RipperEventListener;
+import it.unina.android.ripper.output.JSONRipperOutput;
 import it.unina.android.ripper.planner.Planner;
 import it.unina.android.ripper.scheduler.BreadthScheduler;
 import it.unina.android.ripper.scheduler.DepthScheduler;
@@ -414,8 +415,9 @@ public class AndroidRipperStarter {
             planner = new it.unina.android.ripper.planner.ConfigurationBasedPlanner();
 
             ripperInput = new it.unina.android.shared.ripper.input.XMLRipperInput();
-            ripperOutput = new it.unina.android.shared.ripper.output.XMLRipperOutput();
-
+            //ripperOutput = new it.unina.android.shared.ripper.output.XMLRipperOutput();
+            ripperOutput = new JSONRipperOutput();
+            
             if (new java.io.File(logcatPath).exists() == false) {
                 new java.io.File(logcatPath).mkdir();
             }
