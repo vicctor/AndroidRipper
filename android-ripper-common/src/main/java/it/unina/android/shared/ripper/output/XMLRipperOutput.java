@@ -61,24 +61,6 @@ import static it.unina.android.shared.ripper.constants.XMLModelTags.WIDGET_SIMPL
 import static it.unina.android.shared.ripper.constants.XMLModelTags.WIDGET_TEXT_TYPE;
 import static it.unina.android.shared.ripper.constants.XMLModelTags.WIDGET_VALUE;
 import static it.unina.android.shared.ripper.constants.XMLModelTags.WIDGET_VISIBLE;
-
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import it.unina.android.shared.ripper.model.state.ActivityDescription;
 import it.unina.android.shared.ripper.model.state.WidgetDescription;
 import it.unina.android.shared.ripper.model.task.Task;
@@ -86,6 +68,20 @@ import it.unina.android.shared.ripper.model.task.TaskList;
 import it.unina.android.shared.ripper.model.transition.Event;
 import it.unina.android.shared.ripper.model.transition.IEvent;
 import it.unina.android.shared.ripper.model.transition.Input;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 public class XMLRipperOutput implements RipperOutput
 {
@@ -160,18 +156,6 @@ public class XMLRipperOutput implements RipperOutput
 		}
 		
 		return doc;
-	}
-	
-	@Override
-	public String outputFirstStep(ActivityDescription ad, TaskList t) {
-		try {
-			Document doc = this.buildFirstStepDocument(ad, t);
-			return this.XML2String(doc);
-		} catch (ParserConfigurationException pex) {
-			pex.printStackTrace();
-		}
-		
-		return null;
 	}
 	
 	private Document buildFirstStepDocument(ActivityDescription ad, TaskList t) throws ParserConfigurationException {
@@ -277,18 +261,6 @@ public class XMLRipperOutput implements RipperOutput
 	}
 	
 	@Override
-	public String outputEvent(IEvent evt) {
-		try {
-			Document doc = this.buildIEventDescriptionDocument(evt, EVENT);
-			return this.XML2String(doc);
-		} catch (ParserConfigurationException pex) {
-			pex.printStackTrace();
-		}
-		
-		return null;
-	}
-	
-	@Override
 	public String outputFiredEvent(IEvent evt) {
 		try {
 			Document doc = this.buildIEventDescriptionDocument(evt, FIRED_EVENT);
@@ -356,18 +328,6 @@ public class XMLRipperOutput implements RipperOutput
 		return doc;
 	}
 	
-	@Override
-	public String outputTask(Task t) {
-		try {
-			Document doc = this.buildTaskDescriptionDocument(t);
-			return this.XML2String(doc);
-		} catch (ParserConfigurationException pex) {
-			pex.printStackTrace();
-		}
-		
-		return null;
-	}
-	
 	protected Document buildTaskDescriptionDocument(Task t) throws ParserConfigurationException {
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		Element task = doc.createElement(TASK);
@@ -389,18 +349,6 @@ public class XMLRipperOutput implements RipperOutput
 		return doc;
 	}
 
-	@Override
-	public String outputStep(IEvent e, ActivityDescription a) {
-		try {
-			Document doc = this.buildStepDocument(e, a);
-			return this.XML2String(doc);
-		} catch (ParserConfigurationException pex) {
-			pex.printStackTrace();
-		}
-		
-		return null;
-	}
-	
 	protected Document buildStepDocument(IEvent e, ActivityDescription a) throws ParserConfigurationException {
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		Element step = doc.createElement(STEP);
@@ -471,18 +419,6 @@ public class XMLRipperOutput implements RipperOutput
 		return doc;
 	}
 
-	@Override
-	public String outputStepAndPlannedTasks(IEvent e, ActivityDescription a, TaskList t) {
-		try {
-			Document doc = this.buildStepAndPlannedTasksDocument(e, a, t);
-			return this.XML2String(doc);
-		} catch (ParserConfigurationException pex) {
-			pex.printStackTrace();
-		}
-		
-		return null;
-	}
-	
 	protected Document buildStepAndPlannedTasksDocument(IEvent e, ActivityDescription a, TaskList t) throws ParserConfigurationException {
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		Element step = doc.createElement(STEP);
@@ -527,23 +463,6 @@ public class XMLRipperOutput implements RipperOutput
 		return null;
 	}
 
-	
-	@Override
-	public String outputExtractedEvents(TaskList t) {
-		return this.outputExtractedEvents(t, null);
-	}
-	
-	@Override
-	public String outputExtractedEvents(TaskList t, ActivityDescription from) {
-		try {
-			Document doc = this.buildExtractedEventsDocument(t, from);
-			return this.XML2String(doc);
-		} catch (ParserConfigurationException pex) {
-			pex.printStackTrace();
-		}
-		
-		return null;
-	}
 	
 	private Document buildExtractedEventsDocument(TaskList t, ActivityDescription from) throws ParserConfigurationException {
 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -603,21 +522,6 @@ public class XMLRipperOutput implements RipperOutput
 				
 				return ret;
 
-//				TransformerFactory transfac = TransformerFactory.newInstance();
-//	            //transfac.setAttribute("indent-number", Integer.valueOf(2));
-//	            Transformer trans = transfac.newTransformer();
-//	            trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-//	            trans.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-//	            trans.setOutputProperty(OutputKeys.INDENT, "yes");
-//
-//	            //create string from xml tree
-//	            StringWriter sw = new StringWriter();
-//	            StreamResult result = new StreamResult(sw);
-//	            DOMSource source = new DOMSource(doc);
-//	            trans.transform(source, result);
-//	            String xmlString = sw.toString();
-//	            
-//	           return xmlString;
 				
 			} catch (Exception ex) {
 				ex.printStackTrace();
