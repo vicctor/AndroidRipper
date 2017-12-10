@@ -20,10 +20,9 @@
 package it.unina.android.shared.ripper.model.transition;
 
 
+import it.unina.android.shared.ripper.model.state.WidgetDescription;
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import it.unina.android.shared.ripper.model.state.WidgetDescription;
 
 /**
  * Event
@@ -107,21 +106,6 @@ public class Event implements Serializable, IEvent {
 		this.inputs.clear();
 	}
 	
-	public String getBeforeExecutionStateUID() {
-		return beforeExecutionStateUID;
-	}
-
-	public void setBeforeExecutionStateUID(String beforeExecutionStateUID) {
-		this.beforeExecutionStateUID = beforeExecutionStateUID;
-	}
-
-	public String getAfterExecutionStateUID() {
-		return afterExecutionStateUID;
-	}
-
-	public void setAfterExecutionStateUID(String afterExecutionStateUID) {
-		this.afterExecutionStateUID = afterExecutionStateUID;
-	}
 	
 	@Override
 	public String toString()

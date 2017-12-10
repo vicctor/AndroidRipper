@@ -30,6 +30,7 @@ import it.unina.android.ripper.driver.AbstractDriver;
 import it.unina.android.ripper.driver.exception.AckNotReceivedException;
 import it.unina.android.ripper.driver.exception.NullMessageReceivedException;
 import it.unina.android.ripper.driver.exception.RipperRuntimeException;
+import it.unina.android.ripper.fsm.FSMCollector;
 import it.unina.android.ripper.net.RipperServiceSocket;
 import it.unina.android.ripper.planner.ConfigurationBasedPlanner;
 import it.unina.android.ripper.planner.Planner;
@@ -79,6 +80,8 @@ public class SystematicDriver extends AbstractDriver {
      * TODO: generalize -> now only activity-based state
      */
     protected ActivityStateList statesList;
+
+    private FSMCollector fsmCollector = new FSMCollector();
 
     /**
      * Constructor. Default Components.
@@ -386,34 +389,28 @@ public class SystematicDriver extends AbstractDriver {
 
                 ad = handleAds(ad);
 
-                if (checkBeforeEventStateId(ad, evt)) {
-                    try {
-                        msg = executeEvent(evt);
-                        // output fired event
-                    } catch (AckNotReceivedException e1) {
-                        msg = null;
-                        notifyRipperLog("executeTask(): AckNotReceivedException"); // failure
-                        this.appendLineToLogFile("\n<error type='AckNotReceivedException' />\n");
-                    } catch (NullMessageReceivedException e2) {
-                        Actions.setRipperActive(false);
-                        msg = null;
-                        notifyRipperLog("executeTask(): NullMessageReceivedException"); // failure
-                        this.appendLineToLogFile("\n<error type='NullMessageReceivedException' />\n");
-                    }
+                try {
+                    msg = executeEvent(evt);
+                    // output fired event
 
-                    if (msg == null || running == false) {
-                        break;
-                    } else if (msg != null && msg.isTypeOf(MessageType.ACK_MESSAGE)) {
+                    updateFSM(ad, evt);
+                } catch (AckNotReceivedException e1) {
+                    msg = null;
+                    notifyRipperLog("executeTask(): AckNotReceivedException"); // failure
+                    this.appendLineToLogFile("\n<error type='AckNotReceivedException' />\n");
+                } catch (NullMessageReceivedException e2) {
+                    Actions.setRipperActive(false);
+                    msg = null;
+                    notifyRipperLog("executeTask(): NullMessageReceivedException"); // failure
+                    this.appendLineToLogFile("\n<error type='NullMessageReceivedException' />\n");
+                }
 
-                        Actions.sleepMilliSeconds(SLEEP_AFTER_EVENT);
-
-                    } else if ((msg != null && msg.isTypeOf(MessageType.FAIL_MESSAGE))) {
-                        return msg;
-                    }
-                } else {
-                    // something went wrong
-                    // throw new BeforeEventStateAssertionFailedException()???
-                    this.appendLineToLogFile("\n<error type='BeforeEventStateAssertionFailed' />\n");
+                if (msg == null || running == false) {
+                    break;
+                } else if (msg != null && msg.isTypeOf(MessageType.ACK_MESSAGE)) {
+                    Actions.sleepMilliSeconds(SLEEP_AFTER_EVENT);
+                } else if ((msg != null && msg.isTypeOf(MessageType.FAIL_MESSAGE))) {
+                    return msg;
                 }
             } catch (IOException ex) {
                 notifyRipperLog("executeTask(): Description IOException");
@@ -473,30 +470,6 @@ public class SystematicDriver extends AbstractDriver {
     }
 
     /**
-     * Check if the ActivityDescription is equivalent (using the Comparator) to
-     * the one where the event evt was planned to be performed
-     *
-     * @param ad Activity Description
-     * @param evt Event Description
-     * @return
-     * @throws IOException
-     */
-    protected boolean checkBeforeEventStateId(ActivityDescription ad, IEvent e) throws IOException {
-
-        if (e instanceof Event) {
-            Event evt = (Event) e;
-            if (evt.getBeforeExecutionStateUID().equals("UNDEFINED")) {
-                return true;
-            }
-
-            return ad.getId().equals(evt.getBeforeExecutionStateUID());
-        } else { //instanceof ManualSequence
-            //TODO
-            return true;
-        }
-    }
-
-    /**
      * Get the XML Description File name with full path
      *
      * @return
@@ -530,5 +503,19 @@ public class SystematicDriver extends AbstractDriver {
      */
     public ActivityStateList getStatesList() {
         return statesList;
+    }
+
+    private void updateFSM(ActivityDescription currnetStateDescription, IEvent evt) throws IOException {
+        // get the next state description
+        this.updateLatestDescriptionAsActivityDescription();
+
+        ActivityDescription newStateDescription = this.getLastActivityDescription();
+        final String equivalentActivityStateId = statesList.getEquivalentActivityStateId(newStateDescription);
+        newStateDescription.setId(equivalentActivityStateId);
+
+        // update FSM
+        fsmCollector.updateState(currnetStateDescription, evt, newStateDescription);
+
+        // dump FSM
     }
 }
