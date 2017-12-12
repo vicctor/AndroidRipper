@@ -19,13 +19,6 @@
 
 package it.unina.android.ripper.driver;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-
 import it.unina.android.ripper.driver.device.AbstractDevice;
 import it.unina.android.ripper.driver.exception.AckNotReceivedException;
 import it.unina.android.ripper.driver.exception.NullMessageReceivedException;
@@ -46,6 +39,13 @@ import it.unina.android.shared.ripper.model.transition.IEvent;
 import it.unina.android.shared.ripper.net.Message;
 import it.unina.android.shared.ripper.net.MessageType;
 import it.unina.android.shared.ripper.output.RipperOutput;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 /**
  * Managers the Ripper Process
@@ -154,6 +154,11 @@ public abstract class AbstractDriver {
 	 * Storage path of xml files
 	 */
 	public String XML_OUTPUT_PATH = "";
+        
+        /**
+	 * FSM dump file
+	 */
+	public File FSM_DUMP_FILE = new File("fsm.dump");
 
 	/**
 	 * Scheduler instance

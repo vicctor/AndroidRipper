@@ -81,7 +81,7 @@ public class SystematicDriver extends AbstractDriver {
      */
     protected ActivityStateList statesList;
 
-    private FSMCollector fsmCollector = new FSMCollector();
+    private final FSMCollector fsmCollector;
 
     /**
      * Constructor. Default Components.
@@ -89,7 +89,7 @@ public class SystematicDriver extends AbstractDriver {
     public SystematicDriver() {
         this(new BreadthScheduler(), new ConfigurationBasedPlanner(), new XMLRipperInput(),
                 new ActivityStructureComparator(),
-                new EmptyActivityStateListTerminationCriterion(), new XMLRipperOutput());
+                new EmptyActivityStateListTerminationCriterion(), new XMLRipperOutput());        
     }
 
     /**
@@ -113,6 +113,7 @@ public class SystematicDriver extends AbstractDriver {
         this.comparator = comparator;
         this.statesList = new ActivityStateList(this.comparator);
         this.ripperOutput = ripperOutput;
+        this.fsmCollector = new FSMCollector(this.FSM_DUMP_FILE);
 
         this.addTerminationCriterion(terminationCriterion);
     }
@@ -138,6 +139,7 @@ public class SystematicDriver extends AbstractDriver {
         this.comparator = comparator;
         this.statesList = new ActivityStateList(this.comparator);
         this.ripperOutput = ripperOutput;
+        this.fsmCollector = new FSMCollector(this.FSM_DUMP_FILE);
 
         for (TerminationCriterion tc : terminationCriteria) {
             this.addTerminationCriterion(tc);
@@ -517,5 +519,6 @@ public class SystematicDriver extends AbstractDriver {
         fsmCollector.updateState(currnetStateDescription, evt, newStateDescription);
 
         // dump FSM
+        fsmCollector.dumpFSM();
     }
 }

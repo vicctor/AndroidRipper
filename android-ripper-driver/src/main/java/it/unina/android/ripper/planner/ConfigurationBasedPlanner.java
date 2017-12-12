@@ -19,9 +19,6 @@
 
 package it.unina.android.ripper.planner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import it.unina.android.ripper.planner.widget_events.DrawerListViewEventPlanner;
 import it.unina.android.ripper.planner.widget_events.ImageViewEventPlanner;
 import it.unina.android.ripper.planner.widget_events.LinearLayoutEventPlanner;
@@ -43,6 +40,8 @@ import it.unina.android.shared.ripper.model.state.WidgetDescription;
 import it.unina.android.shared.ripper.model.task.Task;
 import it.unina.android.shared.ripper.model.task.TaskList;
 import it.unina.android.shared.ripper.model.transition.Input;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Planner based on a static configuration. The configuration defines the set of considered
@@ -238,12 +237,12 @@ public class ConfigurationBasedPlanner extends Planner
 	 * @see it.unina.android.ripper.planner.Planner#plan(it.unina.android.ripper.model.Task, it.unina.android.ripper.model.ActivityDescription, java.lang.String[])
 	 */
 	@Override
-	public TaskList plan(Task currentTask, ActivityDescription activity, String... options)
+	public TaskList plan(Task currentTask, ActivityDescription activity)
 	{
 		TaskList taskList = new TaskList();
 		
 		//add activity interactions
-		taskList.addAll(this.planForActivity(currentTask, activity, options));
+		taskList.addAll(this.planForActivity(currentTask, activity));
 
 		//generate inputs
 		ArrayList<Input> inputs = new ArrayList<Input>();
@@ -261,7 +260,7 @@ public class ConfigurationBasedPlanner extends Planner
 		{
 			if (wd.isEnabled() && wd.isVisible())
 			{
-				TaskList tList = this.planForWidget(currentTask, wd, inputs, options);
+				TaskList tList = this.planForWidget(currentTask, wd, inputs);
 				if (tList != null)
 					taskList.addAll(tList);
 			}
@@ -329,7 +328,7 @@ public class ConfigurationBasedPlanner extends Planner
 	 * @param options Configuration
 	 * @return
 	 */
-	protected TaskList planForActivity(Task currentTask, ActivityDescription activity, String... options)
+	protected TaskList planForActivity(Task currentTask, ActivityDescription activity)
 	{
 		TaskList taskList = new TaskList();
 		

@@ -19,9 +19,9 @@
 
 package it.unina.android.shared.ripper.model.transition;
 
-import java.io.Serializable;
-
 import it.unina.android.shared.ripper.model.state.WidgetDescription;
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Input
@@ -93,4 +93,39 @@ public class Input implements Serializable {
 		xml += "</input>\n";
 		return xml;
 	}
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 11 * hash + Objects.hashCode(this.widget);
+        hash = 11 * hash + Objects.hashCode(this.value);
+        hash = 11 * hash + Objects.hashCode(this.inputType);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Input other = (Input) obj;
+        if (!Objects.equals(this.value, other.value)) {
+            return false;
+        }
+        if (!Objects.equals(this.inputType, other.inputType)) {
+            return false;
+        }
+        if (!Objects.equals(this.widget, other.widget)) {
+            return false;
+        }
+        return true;
+    }
+        
+        
 }

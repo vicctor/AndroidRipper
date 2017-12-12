@@ -23,6 +23,7 @@ package it.unina.android.shared.ripper.model.transition;
 import it.unina.android.shared.ripper.model.state.WidgetDescription;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Event
@@ -156,4 +157,15 @@ public class Event implements Serializable, IEvent {
 		
 		return false;
 	}
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 13 * hash + (int) (this.eventUID ^ (this.eventUID >>> 32));
+        hash = 13 * hash + Objects.hashCode(this.interaction);
+        hash = 13 * hash + Objects.hashCode(this.widget);
+        hash = 13 * hash + Objects.hashCode(this.value);
+        hash = 13 * hash + Objects.hashCode(this.inputs);
+        return hash;
+    }
 }

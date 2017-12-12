@@ -103,18 +103,5 @@ public abstract class Planner
 	 * @param activity target ActivityDescription
 	 * @return list of tasks
 	 */
-	public TaskList plan(Task currentTask, ActivityDescription activity) {
-		return plan(currentTask ,activity, null);
-	}
-	
-	/**
-	 * Plan Tasks
-	 * 
-	 * @param currentTask starting task
-	 * @param activity target ActivityDescription
-	 * @param options configuration
-	 * @return list of tasks
-	 */
-	public abstract TaskList plan(Task currentTask, ActivityDescription activity, String ... options);
-
+	public abstract TaskList plan(Task currentTask, ActivityDescription activity);
 }

@@ -528,6 +528,7 @@ public class AndroidRipperStarter {
                 driver.PING_FAILURE_THRESHOLD = Integer.parseInt(ping_failure_threshold);
                 driver.LOGCAT_PATH = logcatPath;
                 driver.XML_OUTPUT_PATH = xmlOutputPath;
+                driver.FSM_DUMP_FILE = new File(xmlOutputPath, "fsm-model.json");
                 driver.TOOLS_PATH = toolsPath;
                 driver.WAIT_AFTER_INSTALL = Integer.parseInt(wait_after_install);
                 driver.WAIT_BEFORE_INSTALL = Integer.parseInt(wait_before_install);
