@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.SerializationUtils;
 
 /**
  *
@@ -41,8 +42,9 @@ public class FSMCollector {
     }
 
     private void addStateIfMissing(ActivityDescription state) {
-        if (states.containsKey(state.getId()) == false) {
-            states.put(state.getId(), state);
+        if (states.containsKey(state.getUid()) == false) {
+            ActivityDescription stateCopy = SerializationUtils.clone(state);
+            states.put(state.getUid(), stateCopy);
         }
     }
 

@@ -19,14 +19,13 @@
 
 package it.unina.android.ripper.comparator;
 
+import it.unina.android.shared.ripper.constants.SimpleType;
+import it.unina.android.shared.ripper.model.state.ActivityDescription;
+import it.unina.android.shared.ripper.model.state.WidgetDescription;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import it.unina.android.shared.ripper.constants.SimpleType;
-import it.unina.android.shared.ripper.model.state.ActivityDescription;
-import it.unina.android.shared.ripper.model.state.WidgetDescription;
 
 /**
  * Generic Comparator.
@@ -39,7 +38,7 @@ import it.unina.android.shared.ripper.model.state.WidgetDescription;
 public class WidgetPropertiesComparator implements IComparator, Serializable {
 
 	/* DEBUG FUNCTIONS ;-) */
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
 	public static final String TAG = "SimpleComparator";
 	public static void debug(String s) { if (DEBUG)	System.out.println("["+TAG+"]"+s); }
 	public static void debug(boolean condition, String s) { if (DEBUG && condition)	System.out.println("["+TAG+"]"+s); }
