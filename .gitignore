@@ -30,3 +30,4 @@ build/
 /android-ripper-app/.nb-gradle/
 android-ripper-driver/tools
 /android-ripper-it/android-ripper-simple-wizard-testable/.nb-gradle/
+*.iml

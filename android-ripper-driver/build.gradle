@@ -1,11 +1,13 @@
 plugins {
     id 'net.ltgt.apt' version '0.10'
+    id "de.undercouch.download" version "1.2"
 }
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'de.undercouch.download'
 
-
+import de.undercouch.gradle.tasks.download.Download
 
 // Configure the repository
 uploadArchives {
@@ -17,6 +19,14 @@ uploadArchives {
     }
 }
 
+task downloadSmaliTools(type: Download) {
+    src (['https://bitbucket.org/JesusFreke/smali/downloads/smali-2.2.2.jar',
+         'https://bitbucket.org/JesusFreke/smali/downloads/baksmali-2.2.2.jar',
+         'https://bitbucket.org/iBotPeaches/apktool/downloads/apktool_2.3.1.jar'])
+    dest 'tools'
+}
+
+
 
 dependencies {
     //compile 'org.apache.commons:commons-lang3:3.7'
@@ -24,10 +34,19 @@ dependencies {
     compile files('lib/custom_gson_2.8.1.jar')
     compile files('lib/commons-lang3-3.5.jar')
     compile project (':android-ripper-common')
+    
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
    
     compileOnly 'org.projectlombok:lombok:1.16.18'
 	
     apt "org.projectlombok:lombok:1.16.18"
+    
+    testCompile 'junit:junit:4.12'
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.9.0'
+
 }
 
 task run(type: JavaExec) {
@@ -62,3 +81,6 @@ task startemulator(type: Exec) {
     commandLine new File(System.env.ANDROID_HOME + "emulator/emulator").getAbsoluteFile()
     args '-avd testX86'.split(' ')
 }
+
+
+downloadSmaliTools

@@ -39,6 +39,7 @@ import it.unina.android.ripper.scheduler.BreadthScheduler;
 import it.unina.android.ripper.scheduler.DepthScheduler;
 import it.unina.android.ripper.scheduler.Scheduler;
 import it.unina.android.ripper.scheduler.UniformRandomScheduler;
+import it.unina.android.ripper.smali.SmaliUtils;
 import it.unina.android.ripper.termination.TerminationCriterion;
 import it.unina.android.ripper.tools.actions.Actions;
 import it.unina.android.ripper.utils.RipperStringUtils;
@@ -65,6 +66,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Configure the AndroidRipperDriver, handle console output, start up the
@@ -574,11 +577,11 @@ public class AndroidRipperStarter {
      * @return
      */
     private Properties loadConfigurationFile(String fileName) {
-        Properties conf = new Properties();
+        Properties configProperties = new Properties();
 
         try {
-            conf.load(new FileInputStream(fileName));
-            return conf;
+            configProperties.load(new FileInputStream(fileName));
+            return configProperties;
         } catch (IOException ex) {
             throw new RipperRuntimeException(AndroidRipperStarter.class, "loadConfigurationFile", "Unable to load cofngiruation file!", ex);
         }
@@ -709,6 +712,10 @@ public class AndroidRipperStarter {
                     FileSystems.getDefault().getPath(tempPath + "/temp.apk"),
                     (CopyOption) StandardCopyOption.REPLACE_EXISTING);
 
+            
+            println("Instrument AUT");
+            instrumentAUT(toolsPath, tempPath + "/temp.apk");
+            
             println("Signing AUT...");
             ZipUtils.deleteFromZip(tempPath + "/temp.apk");
             execCommand("jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore " + debugKeyStorePath
@@ -719,6 +726,31 @@ public class AndroidRipperStarter {
 
         } catch (Throwable t) {
             throw new RipperRuntimeException(AndroidRipperStarter.class, "createAPKs", "apk build failed", t);
+        }
+    }
+    
+    
+    
+    private void instrumentAUT(String toolsPath, String applicationUnderTestApkFile) {
+        String autTmpDir = applicationUnderTestApkFile + "_tmp";
+        String autSmaliDir = applicationUnderTestApkFile + "_tmp_smali";
+        ZipUtils.unZip(applicationUnderTestApkFile, autTmpDir);
+        
+        execCommand("java -jar " + toolsPath + "/baksmali-2.2.2.jar d " + autTmpDir + "/classes.dex -o " + autSmaliDir );
+        final File smaliDir = new File(autSmaliDir);
+        final Path smaliPath = smaliDir.toPath();
+        SmaliUtils.injectTraceOnProject(smaliDir, f -> 
+                f.getAbsolutePath().substring(smaliDir.getAbsolutePath().length() + 1).startsWith("com")
+                //f.getAbsolutePath().substring(smaliDir.getAbsolutePath().length() + 1).startsWith("android") == false)
+        );
+        
+        execCommand("java -jar " + toolsPath + "/smali-2.2.2.jar a  -o " + autTmpDir + "/classes.dex " + autSmaliDir );   
+        execCommand("java -jar " + toolsPath + "/smali-2.2.2.jar a  -o " + autTmpDir + "/classes2.dex " + autSmaliDir );   
+        
+        try {        
+            ZipUtils.zipDir(applicationUnderTestApkFile, autTmpDir);
+        } catch (Exception ex) {
+            Logger.getLogger(AndroidRipperStarter.class.getName()).log(Level.SEVERE, "Could not pack AUT back", ex);
         }
     }
 
