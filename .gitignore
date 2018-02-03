@@ -31,3 +31,23 @@ build/
 android-ripper-driver/tools
 /android-ripper-it/android-ripper-simple-wizard-testable/.nb-gradle/
 *.iml
+/android-ripper-driver/Bites_1.3.apk
+/android-ripper-driver/classes.dex
+/android-ripper-driver/default.properties
+/android-ripper-driver/dir-expected
+/android-ripper-driver/dir-processed
+/android-ripper-driver/dir-test
+/android-ripper-driver/fsm - Copy.dump
+/android-ripper-driver/fsm.dump
+/android-ripper-driver/gradle/wrapper/gradle-wrapper.jar
+/android-ripper-driver/oOCalc-debug.apk
+/android-ripper-driver/resources
+/android-ripper-driver/tmp
+/local.properties
+/.nb-gradle-properties
+/android-ripper-app/gradle/wrapper/gradle-wrapper.jar
+/android-ripper-common/gradle/wrapper/gradle-wrapper.jar
+/android-ripper-driver/analyser.js
+/android-ripper-driver/app-debug.apk
+/android-ripper-driver/app-debug.apkz
+/android-ripper-service/gradle/wrapper/gradle-wrapper.jar
